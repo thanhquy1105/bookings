@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/thanhquy1105/bookings/pkg/config"
-	"github.com/thanhquy1105/bookings/pkg/handlers"
-	"github.com/thanhquy1105/bookings/pkg/render"
+	"github.com/thanhquy1105/bookings/infernal/config"
+	"github.com/thanhquy1105/bookings/infernal/handlers"
+	"github.com/thanhquy1105/bookings/infernal/render"
 )
 
 var portNumber = ":8080"
