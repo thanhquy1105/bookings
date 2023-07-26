@@ -8,14 +8,14 @@ import (
 )
 
 func TestRoutes(t *testing.T) {
-    var app config.AppConfig
+	var app config.AppConfig
 
-    mux:=routes(&app)
+	mux := routes(&app)
 
-    switch v:=mux.(type) {
-    case *chi.Mux: 
-        //do nothing
-    default:
-        t.Errorf("type is not *chi.Mux, type is %T",v)
-    }
+	switch v := mux.(type) {
+	case *chi.Mux:
+		//do nothing
+	default:
+		t.Errorf("type is not *chi.Mux, type is %T", v)
+	}
 }
