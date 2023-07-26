@@ -13,9 +13,9 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/justinas/nosurf"
-	"github.com/thanhquy1105/bookings/infernal/config"
-	"github.com/thanhquy1105/bookings/infernal/models"
-	"github.com/thanhquy1105/bookings/infernal/render"
+	"github.com/thanhquy1105/bookings/internal/config"
+	"github.com/thanhquy1105/bookings/internal/models"
+	"github.com/thanhquy1105/bookings/internal/render"
 )
 
 var app config.AppConfig

@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/thanhquy1105/bookings/infernal/config"
-	"github.com/thanhquy1105/bookings/infernal/handlers"
+	"github.com/thanhquy1105/bookings/internal/config"
+	"github.com/thanhquy1105/bookings/internal/handlers"
 )
 
 func routes(app *config.AppConfig) http.Handler {

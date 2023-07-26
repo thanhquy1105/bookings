@@ -6,10 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/thanhquy1105/bookings/infernal/config"
-	"github.com/thanhquy1105/bookings/infernal/forms"
-	"github.com/thanhquy1105/bookings/infernal/models"
-	"github.com/thanhquy1105/bookings/infernal/render"
+	"github.com/thanhquy1105/bookings/internal/config"
+	"github.com/thanhquy1105/bookings/internal/forms"
+	"github.com/thanhquy1105/bookings/internal/models"
+	"github.com/thanhquy1105/bookings/internal/render"
 )
 
 var Repo *Repository
