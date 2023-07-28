@@ -63,7 +63,7 @@ func getSession() (*http.Request, error) {
 
 }
 
-func TestnewTemplates(t *testing.T) {
+func TestNewTemplates(t *testing.T) {
 	NewTemplates(app)
 
 }
