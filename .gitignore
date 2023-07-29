@@ -21,3 +21,4 @@
 go.work
 html-source
 database.yml
+.env

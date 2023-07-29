@@ -6,21 +6,26 @@ import (
 	"net/http"
 
 	"github.com/thanhquy1105/bookings/internal/config"
+	"github.com/thanhquy1105/bookings/internal/driver"
 	"github.com/thanhquy1105/bookings/internal/forms"
 	"github.com/thanhquy1105/bookings/internal/helpers"
 	"github.com/thanhquy1105/bookings/internal/models"
 	"github.com/thanhquy1105/bookings/internal/render"
+	"github.com/thanhquy1105/bookings/internal/repository"
+	"github.com/thanhquy1105/bookings/internal/repository/dbrepo"
 )
 
 var Repo *Repository
 
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 
@@ -29,7 +34,7 @@ func NewHandlers(r *Repository) {
 }
 
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-
+	m.DB.AllUsers()
 	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{})
 }
 
