@@ -12,10 +12,17 @@ func (m *testBDRepo) AllUsers() bool {
 }
 
 func (m *testBDRepo) InsertReservation(res models.Reservation) (int, error) {
+	// if the room id is 2, then fail; otherwise, pass
+	if res.RoomID == 2 {
+		return 0, errors.New("some error)")
+	}
 	return 1, nil
 }
 
 func (m *testBDRepo) InsertRoomRestriction(res models.RoomRestriction) error {
+	if res.RoomID == 1000 {
+		return errors.New("some error")
+	}
 	return nil
 }
 
