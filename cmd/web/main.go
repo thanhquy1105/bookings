@@ -67,7 +67,8 @@ func run() (*driver.DB, error) {
 
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatalf("Error loading .env file")
+		log.Fatal("Error loading .env file")
+		log.Fatal(err)
 	}
 
 	log.Println("Connecting to database...")
