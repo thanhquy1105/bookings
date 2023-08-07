@@ -10,11 +10,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (m *postgresBDRepo) AllUsers() bool {
+func (m *postgresDBRepo) AllUsers() bool {
 	return true
 }
 
-func (m *postgresBDRepo) InsertReservation(res models.Reservation) (int, error) {
+func (m *postgresDBRepo) InsertReservation(res models.Reservation) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -43,7 +43,7 @@ func (m *postgresBDRepo) InsertReservation(res models.Reservation) (int, error) 
 	return newID, nil
 }
 
-func (m *postgresBDRepo) InsertRoomRestriction(res models.RoomRestriction) error {
+func (m *postgresDBRepo) InsertRoomRestriction(res models.RoomRestriction) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -68,7 +68,7 @@ func (m *postgresBDRepo) InsertRoomRestriction(res models.RoomRestriction) error
 }
 
 // SearchAvailabilityByDatesByRoomID returns true if availability exists for roomID, and false if no availability exists
-func (m *postgresBDRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roomID int) (bool, error) {
+func (m *postgresDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roomID int) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -92,7 +92,7 @@ func (m *postgresBDRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time,
 }
 
 // SearchAvailabilityForAllRooms returns a slice of available rooms, if any, for given date range
-func (m *postgresBDRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Room, error) {
+func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Room, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -127,7 +127,7 @@ func (m *postgresBDRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]
 	return rooms, nil
 }
 
-func (m *postgresBDRepo) GetRoomByID(id int) (models.Room, error) {
+func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -149,7 +149,7 @@ func (m *postgresBDRepo) GetRoomByID(id int) (models.Room, error) {
 	return room, nil
 }
 
-func (m *postgresBDRepo) GetUserByID(id int) (models.User, error) {
+func (m *postgresDBRepo) GetUserByID(id int) (models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -177,7 +177,7 @@ func (m *postgresBDRepo) GetUserByID(id int) (models.User, error) {
 	return u, nil
 }
 
-func (m *postgresBDRepo) UpdateUser(u models.User) error {
+func (m *postgresDBRepo) UpdateUser(u models.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -197,7 +197,7 @@ func (m *postgresBDRepo) UpdateUser(u models.User) error {
 	return nil
 }
 
-func (m *postgresBDRepo) Authenticate(email, testPassword string) (int, string, error) {
+func (m *postgresDBRepo) Authenticate(email, testPassword string) (int, string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -221,7 +221,7 @@ func (m *postgresBDRepo) Authenticate(email, testPassword string) (int, string, 
 
 }
 
-func (m *postgresBDRepo) AllReservations() ([]models.Reservation, error) {
+func (m *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -273,7 +273,7 @@ func (m *postgresBDRepo) AllReservations() ([]models.Reservation, error) {
 	return reservations, nil
 }
 
-func (m *postgresBDRepo) AllNewReservations() ([]models.Reservation, error) {
+func (m *postgresDBRepo) AllNewReservations() ([]models.Reservation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -325,7 +325,7 @@ func (m *postgresBDRepo) AllNewReservations() ([]models.Reservation, error) {
 	return reservations, nil
 }
 
-func (m *postgresBDRepo) GetReservationByID(id int) (models.Reservation, error) {
+func (m *postgresDBRepo) GetReservationByID(id int) (models.Reservation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -360,4 +360,53 @@ func (m *postgresBDRepo) GetReservationByID(id int) (models.Reservation, error) 
 	}
 
 	return res, nil
+}
+
+func (m *postgresDBRepo) UpdateReservation(u models.Reservation) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `update reservations set first_name = $1, last_name = $2, email = $3, phone = $4, updated_at = $5
+			  where id = $6`
+
+	_, err := m.DB.ExecContext(ctx, query,
+		u.FirstName,
+		u.LastName,
+		u.Email,
+		u.Phone,
+		time.Now(),
+		u.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *postgresDBRepo) DeleteReservation(id int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := "delete from reservations where id = $1"
+
+	_, err := m.DB.ExecContext(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *postgresDBRepo) UpdateProcessedForReservation(id, processed int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := "update reservations set processed = $1 where id = $2"
+
+	_, err := m.DB.ExecContext(ctx, query, processed, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
