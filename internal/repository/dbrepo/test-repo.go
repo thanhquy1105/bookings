@@ -112,7 +112,10 @@ func (m *testBDRepo) UpdateUser(u models.User) error {
 }
 
 func (m *testBDRepo) Authenticate(email, testPassword string) (int, string, error) {
-	return 1, "", nil
+	if email == "thanhquy1105@gmail.com" {
+		return 1, "", nil
+	}
+	return 0, "", errors.New("some error")
 }
 
 func (m *testBDRepo) AllReservations() ([]models.Reservation, error) {
@@ -151,12 +154,31 @@ func (m *testBDRepo) UpdateProcessedForReservation(id, processed int) error {
 
 func (m *testBDRepo) AllRooms() ([]models.Room, error) {
 	var rooms []models.Room
+	rooms = append(rooms, models.Room{ID: 1})
 	return rooms, nil
 }
 
 func (m *testBDRepo) GetRestrictionsForRoomByDate(roomID int, start, end time.Time) ([]models.RoomRestriction, error) {
 	var restrictions []models.RoomRestriction
+	// add a block
+	restrictions = append(restrictions, models.RoomRestriction{
+		ID:            1,
+		StartDate:     time.Now(),
+		EndDate:       time.Now().AddDate(0, 0, 1),
+		RoomID:        1,
+		ReservationID: 0,
+		RestrictionID: 2,
+	})
 
+	// add a reservation
+	restrictions = append(restrictions, models.RoomRestriction{
+		ID:            2,
+		StartDate:     time.Now().AddDate(0, 0, 2),
+		EndDate:       time.Now().AddDate(0, 0, 3),
+		RoomID:        1,
+		ReservationID: 1,
+		RestrictionID: 1,
+	})
 	return restrictions, nil
 }
 
